@@ -1,10 +1,10 @@
 // Import necessary modules and configurations
 import "dotenv/config";
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import connectToMongo from "../configs/connectToDb.ts";
 import router from "../routes/notesRoutes.ts";
 import { unhandledRoutes } from "../controllers/notesControler.ts";
-import AppError from "../utils/appError.ts";
+import globalErrorHandler from "../controllers/errorController.ts";
 
 // Create an instance of the Express application
 const app = express();
@@ -25,15 +25,7 @@ app.use("/api/v1/notes", router);
 app.all("*", unhandledRoutes);
 
 // Error handling middleware
-app.use((error: AppError, req: Request, res: Response, next: NextFunction) => {
-
-  // Extract status and statusCode from the error, default to "Error" and 400 if not present
-  const status = error.status || "Error";
-  const statusCode = error.statusCode || 400;
-
-  // Send a JSON response with the error details and status code
-  res.status(statusCode).json({ status, message: error.message });
-});
+app.use(globalErrorHandler);
 
 // Start the Express server and listen on the specified port
 app.listen(PORT, () => {
