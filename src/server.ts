@@ -26,8 +26,6 @@ app.all("*", unhandledRoutes);
 
 // Error handling middleware
 app.use((error: AppError, req: Request, res: Response, next: NextFunction) => {
-  // Log the error stack trace
-  console.log(error.stack);
 
   // Extract status and statusCode from the error, default to "Error" and 400 if not present
   const status = error.status || "Error";
@@ -35,9 +33,6 @@ app.use((error: AppError, req: Request, res: Response, next: NextFunction) => {
 
   // Send a JSON response with the error details and status code
   res.status(statusCode).json({ status, message: error.message });
-
-  // Call the next middleware
-  next();
 });
 
 // Start the Express server and listen on the specified port
