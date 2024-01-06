@@ -3,24 +3,24 @@ import Note from "../models/notesModel.ts";
 import AppError from "../utils/appError.ts";
 
 // Catch-all route handler for undefined routes
-const unhandledRoutes: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+const unhandledRoutes: RequestHandler = (
+  _req: Request,
+  _res: Response,
+  next: NextFunction
+) => {
   // Create and pass an AppError with a 404 status and a custom message
   next(new AppError("This Routes Are Not Defined", 404));
 };
 
-// Response body structure for the "getNotes" endpoint
-interface ResponseNotesBody {
-  message?: string;
-  notes?: string[];
-  error?: string;
-}
-
 // GET ALL NOTES
-const getNotes: RequestHandler<unknown, ResponseNotesBody, unknown, unknown> = async (req, res): Promise<void> => {
+const getNotes: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     // Fetch all notes from the database
     const notes: string[] = await Note.find();
-    
+
     // Send a JSON response with the fetched notes
     res.status(200).json({
       message: "Notes Found",
@@ -34,7 +34,7 @@ const getNotes: RequestHandler<unknown, ResponseNotesBody, unknown, unknown> = a
 };
 
 // GET A NOTE
-const getNote: RequestHandler = async (req, res): Promise<void> => {
+const getNote: RequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     // Extract the note ID from the request parameters
     const id: string = req.params.id;
@@ -69,12 +69,16 @@ interface CreateNoteBody {
 }
 
 // CREATE A NEW NOTE
-const createNote: RequestHandler<unknown, unknown, CreateNoteBody, unknown> = async (req, res) => {
+const createNote: RequestHandler = async (
+  req: Request<unknown, unknown, CreateNoteBody, unknown>,
+  res: Response
+) => {
   try {
     // Extract the request body and create a new note in the database
-    const body = req.body as CreateNoteBody;
+    const body = req.body;
     const note = await Note.create({
-      ...body,
+      title: body.title,
+      description: body.description,
     });
 
     // Send a JSON response with the created note
