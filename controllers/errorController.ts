@@ -25,8 +25,13 @@ const globalErrorHandler = (
         status: error.status,
         message: error.message,
       });
-    }else{
-        res.status(500).json({status : 'Error', message : "Something went wrong please try again later "})
+    } else {
+      res
+        .status(500)
+        .json({
+          status: "Error",
+          message: "Something went wrong please try again later ",
+        });
     }
   }
 };

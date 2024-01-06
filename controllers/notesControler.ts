@@ -78,5 +78,39 @@ const createNote: RequestHandler = catchAsync(
   }
 );
 
+// UPDATE A NOTE
+
+const updateNote: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id: string = req.params.id;
+    const note = await Note.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!note) return next(new AppError("The note was not found", 404));
+    res.status(200).json({
+      success: true,
+      message: "Note Updated",
+      note,
+    });
+  }
+);
+// CREATE A NOTE
+const deleteNote: RequestHandler = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Find the note to be deleted by its ID
+    const id: string = req.params.id;
+
+    const note = await Note.findByIdAndDelete(id);
+    if (!note) {
+      return next(new AppError("No note found with that Id", 404));
+    }
+    // Return a success message
+    res.status(204).json({
+      status: "success",
+      note,
+    });
+  }
+);
 // Export the route handlers for use in other files
-export { getNotes, createNote, getNote, unhandledRoutes };
+export { getNotes, createNote, getNote, updateNote ,deleteNote, unhandledRoutes };
