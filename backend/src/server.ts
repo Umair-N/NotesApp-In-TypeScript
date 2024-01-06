@@ -5,7 +5,7 @@ import connectToMongo from "../configs/connectToDb.ts";
 import router from "../routes/notesRoutes.ts";
 import { unhandledRoutes } from "../controllers/notesControler.ts";
 import globalErrorHandler from "../controllers/errorController.ts";
-
+import cors from "cors"
 // Create an instance of the Express application
 const app = express();
 
@@ -18,6 +18,7 @@ connectToMongo();
 // Set the port from the environment variables
 const PORT = process.env.PORT;
 
+app.use(cors())
 // Use the defined router for handling routes starting with "/api/v1/notes"
 app.use("/api/v1/notes", router);
 
