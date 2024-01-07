@@ -21,8 +21,10 @@ function App() {
   return (
     <>
       <div className="mt-6 p-6">
-        <FormModal />
-        <div className="grid grid-cols-3 p-20">
+        <span className="flex justify-end w-2/3 m-auto">
+          <FormModal />
+        </span>
+        <div className="grid grid-cols-3 p-20 min-w-min">
           {notes.map((note) => (
             <Note key={note._id} note={note} />
           ))}
