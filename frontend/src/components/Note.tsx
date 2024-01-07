@@ -4,9 +4,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 interface NoteProps {
   note: NoteModel;
   deleteNote: (note: NoteModel) => void;
+  editNote: (note: NoteModel) => void;
 }
 
-const Note = ({ note, deleteNote }: NoteProps) => {
+const Note = ({ note, deleteNote, editNote,}: NoteProps) => {
   const { title, description, createdAt, updatedAt } = note;
 
   return (
@@ -15,11 +16,14 @@ const Note = ({ note, deleteNote }: NoteProps) => {
         <div className="notes--wrapper w-100 flex flex-col justify-center gap-2">
           <span className="flex justify-between text-xl mt-4 font-bold">
             Title:{" "}
-            <span onClick={()=> deleteNote(note)}>
-              {<DeleteIcon />}
-            </span>
+            <span onClick={() => deleteNote(note)}>{<DeleteIcon />}</span>
           </span>
-          <h1 className="text-3xl font-poppins tracking-wide medium">
+          <h1
+            className="text-3xl font-poppins tracking-wide medium"
+            onClick={() => {
+              editNote(note);
+            }}
+          >
             {title}
           </h1>
           <p className="text-md mt-2 mb-4">{description}</p>

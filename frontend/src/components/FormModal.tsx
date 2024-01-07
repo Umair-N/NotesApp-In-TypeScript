@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -9,7 +9,8 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
-import {createNote} from "../utils/createNote";
+import { createNote, updateNote } from "../utils/createNote";
+import { NoteModel } from "../types/notes";
 
 const theme = createTheme({
   palette: {
@@ -34,12 +35,23 @@ const style = {
   p: 4,
 };
 
-export default function FormModal() {
+interface modalProps {
+  noteToEdit: NoteModel | null;
+  openModal: boolean;
+}
+const FormModal = ({ noteToEdit, openModal }: modalProps) => {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
   });
+  useEffect(() => {
+    setOpen(openModal);
+    setFormData({
+      title: noteToEdit?.title || " ",
+      description: noteToEdit?.description || "",
+    });
+  }, [openModal]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -53,7 +65,7 @@ export default function FormModal() {
   };
 
   const formDataCollector = () => {
-    createNote(formData);
+    noteToEdit ? updateNote(noteToEdit?._id || "", formData) :  createNote(formData); 
     handleClose();
     setFormData({
       title: "",
@@ -123,4 +135,5 @@ export default function FormModal() {
       </Box>
     </ThemeProvider>
   );
-}
+};
+export default FormModal;
