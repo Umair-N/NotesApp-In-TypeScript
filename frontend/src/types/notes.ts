@@ -5,3 +5,7 @@ export interface NoteModel {
     createdAt: string
     updatedAt : string
 }
+export interface createNote {
+    title: string;
+    description?: string;
+}
