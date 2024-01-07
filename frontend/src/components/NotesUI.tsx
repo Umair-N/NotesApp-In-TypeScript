@@ -5,22 +5,24 @@ import Note from "../components/Note";
 import FormModal from "../components/FormModal";
 import { deleteNote } from "../utils/createNote";
 
+
 function NotesUI() {
   const [notes, setNotes] = useState<NoteModel[]>([]);
+  const loadNotes = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:5000/api/v1/notes");
+      setNotes(data.notes);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    const loadNotes = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:5000/api/v1/notes");
-        setNotes(data.notes);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     loadNotes();
-  }, [notes]);
+  },[]);
 
   const handleDelete = async (note: NoteModel) => {
     await deleteNote(note._id)
+    loadNotes()
   }
   return (
     <>
